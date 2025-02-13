@@ -1,0 +1,55 @@
+.wrap {
+    width: 1200px;
+    margin: 0px auto;
+}
+.post_memo {
+    width: 1200px;
+    height: 380px;
+    background-color: orangered;
+    padding-left: 50px;
+    padding-top: 15px;
+    border: 5px solid wheat;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+.post_memo div {
+    margin-top: 25px;
+}
+.main {
+    display: flex;
+    color: wheat;
+}
+.version {
+    margin-left: 15px;
+    background-color: brown;
+    color: wheat;
+}
+.memo_title {
+    width: 650px;
+    height: 40px;
+}
+.memo_content {
+    width: 650px;
+    height: 90px;
+}
+ul li {
+    float: left;
+    width: 32%;
+    height: 230px;
+    border: 1px solid wheat;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-bottom: 15px;
+    display: block;
+}
+ul li div {
+    padding-top: 25px;
+    padding-left: 15px;
+}
+ul li div input {
+    width: 330px;
+    height: 45px;
+}
+.new_card {
+    display: none;
+}

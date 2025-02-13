@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/styles.css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <!-- jQuery 를 포함합니다. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>Krafton Jungle Pr4</title>
+
+    <script>
+        $(document).ready(function () {
+            $("#card_list").html("");
+            showMemo();
+        })
+        function openClose(id) {
+            let status = $('#card'+ id).css('display')
+            if (status == 'block') {
+                $('#card'+id).hide();
+                $('#new_card'+id).show();
+            }
+        }
+        function postMemo() {
+            let title = $('.memo_title').val();
+            let content = $('.memo_content').val();
+            $.ajax({
+                type: "POST",
+                url: "/postMemo",
+                data: { title_give: title, content_give: content },
+                success: function(response){
+                    if (response['result'] == 'success') {
+                        alert('포스팅 성공!');
+                        window.location.reload();
+                    } else {
+                        alert('서버오류')
+                    }
+                }
+            })    
+        }
+        function showMemo() {
+            $.ajax({
+                type: "GET",
+                url: "/readMemo",
+                data: {},
+                success: function(response){
+                    let memos = response['memos'];
+                    for ( i=0; i<memos.length; i++){
+                        makeCard(memos[i]["id"], memos[i]["title"], memos[i]["content"], memos[i]["like"]);
+                    }
+                }
+            })
+        }
+        function makeCard(id, title, content, like) {
+            let tempHtml = `<li id="card${id}">
+                <div>
+                    <span>${title}</span>
+                </div>
+                <div>
+                    <span>${content}</span>
+                </div>
+                <div>
+                    <span>${like}</span>
+                </div>
+                <div>
+                    <button onclick="openClose('${id}')" type="submit" class="btn btn-info">수정</button>
+                    <button onclick="deleteMemo('${id}')" type="submit" class="btn btn-danger">삭제</button>
+                    <button onclick="likeMemo('${id}')" type="submit" class="btn btn-link">좋아요</button>
+                </div>
+            </li>
+            <li id="new_card${id}" class="new_card">
+                <div>
+                    <input id="new_title${id}" type="text" placeholder="제목을 수정하세요.">
+                </div>
+                <div>
+                    <input id="new_content${id}" type="text" placeholder="내용을 수정하세요.">
+                </div>
+                <div>
+                    <button onclick="updateMemo('${id}',$('#new_title${id}').val(), $('#new_content${id}').val())" type="submit" class="btn btn-success">저장</button>
+                </div>
+            </li>`;
+            $('#card_list').append(tempHtml)
+        }
+        function deleteMemo(id) {
+            $.ajax({
+                type: "POST",
+                url: "/deleteMemo",
+                data: { id_give: id },
+                success: function(response){
+                    if (response['result'] == 'success') {
+                        alert('삭제 성공!');
+                        window.location.reload();
+                    } else {
+                        alert('서버오류')
+                    }
+                }
+            })    
+        }
+        function likeMemo(id) {
+            $.ajax({
+                type: "POST",
+                url: "/likeMemo",
+                data: { id_give: id },
+                success: function(response){
+                    if (response['result'] == 'success') {
+                        alert('좋아요 성공!');
+                        window.location.reload();
+                    } else {
+                        alert('서버오류')
+                    }
+                }
+            })    
+        }
+        function updateMemo(id, new_title, new_content) {
+            $.ajax({
+                type: "POST",
+                url: "/updateMemo",
+                data: { id_give: id, new_title_give: new_title, new_content_give: new_content },
+                success: function(response){
+                    if (response['result'] == 'success') {
+                        alert('수정 성공!');
+                        window.location.reload();
+                    } else {
+                        alert('서버오류')
+                    }
+                }
+            })    
+        }
+
+
+
+    </script>
+
+</head>
+<body>
+    <div class="wrap">
+        <div class="post_memo">
+            <div class="main">
+                <h1>나 홀로 메모장</h1><h1 class="version">ver4.0</h1>
+            </div>
+            <div>
+                <input class="memo_title" type="text" placeholder="제목을 입력해주세요.">
+            </div>
+            <div>
+                <input class="memo_content" type="text" placeholder="내용을 입력해주세요.">
+            </div>
+            <div>
+                <button onclick="postMemo()" type="submit" class="btn btn-primary">저장하기</button>
+            </div>
+        </div>
+        <ul id="card_list">
+            
+    
+        </ul>
+
+
+    </div>
+</body>
+</html>
