@@ -8,9 +8,6 @@
 - 백엔드: Python, Flask, MongoDB
 - 배포 및 인프라: AWS EC2
 
-### 📁 GitHub
-
-- https://github.com/seongjin0614/AloneMemo
 
 ### 💻 주요 역할 및 구현 내용
 
